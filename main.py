@@ -1,5 +1,5 @@
 import pygame as pg
-import json, player
+import json, overall
 pg.init()
 
 
@@ -24,12 +24,11 @@ fps = pg.time.Clock()
 #FONT
 displayFont = config["Display"]["font"]
 
-
 #BLIT FPS
 def displayFps():
     font = pg.font.Font(displayFont , 18, bold=True)
     getFps = str(int(fps.get_fps()))
-    rendrFps = font.render(getFps, True, (255,255,255))
+    rendrFps = font.render(getFps, True, (30,200,200))
     display.blit(rendrFps, (5,5))
 
 #EVENTHANDLER
@@ -52,7 +51,7 @@ def eventHandler():
 
 
 #PLAYER EVENTS
-Player = player.Player(pg, config)
+overall = overall.Player(pg, config)
 
 #UPDATE LOOP
 while True:
@@ -60,10 +59,10 @@ while True:
     window.fill((30,30,30))
     #=
 
-    Player.playerGun(pg, window, config)
-    Player.playerEvent(pg, window)
-    
-
+    overall.playerGun(pg, window, config)
+    overall.playerEvent(pg, window)
+    overall.gameMap(pg, window)
+    overall.placeBlock(pg, window, config)
     #=
     eventHandler()
 
