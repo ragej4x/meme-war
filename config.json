@@ -1,0 +1,21 @@
+{
+    "Display":{
+
+        "width":720,
+
+        "height": 500,
+
+        "dynamicRes": 2,
+
+        "windowMode": 1,
+
+        "frameRate": 60,
+
+        "showFps": true,
+        
+        "font": "data/ShantellSans-Bold.ttf"
+
+    }
+
+}
+
