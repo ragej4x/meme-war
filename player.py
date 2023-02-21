@@ -8,19 +8,19 @@ class Player():
         self.x = 100
         self.y = 100
 
-        self.pSpeed = 5
-
+        self.pSpeed = 3
 
         self.walkList = []
         self.animFrame = 0
 
 
-
         #GUN
         self.bullet = []
-        self.bulletSpeed = 5
+        self.bulletSpeed = 7
         self.bulX = self.x
         self.bulY = self.y
+
+
     def playerEvent(self, pg, window):
         self.keyinput = pg.key.get_pressed()
         self.playerRect = pg.Rect(self.x , self.y, 16,25)
@@ -45,29 +45,28 @@ class Player():
 
 
     def playerGun(self, pg, window, config):
-        #bulSprite = 
-
-        click = pg.mouse.get_pressed()[0] 
+        fire = pg.mouse.get_pressed()[0] 
         mx,my = pg.mouse.get_pos()
         mx // config["Display"]["dynamicRes"]
         my // config["Display"]["dynamicRes"]
+
 
         pg.draw.line(window, (30,200,30), (mx// config["Display"]["dynamicRes"], my// config["Display"]["dynamicRes"]),(self.x + 8, self.y))
         pg.draw.circle(window, (200,30,30), (mx// config["Display"]["dynamicRes"], my// config["Display"]["dynamicRes"]), 2)
 
 
-
-
-        if click:
+        if fire:
             self.bullet.append([pg.image.load("data/bulSprite.png") ,  self.x + 8, self.y,
             mx // config["Display"]["dynamicRes"],
             my // config["Display"]["dynamicRes"],
-            math.atan2(self.y - my // config["Display"]["dynamicRes"], self.x - mx // config["Display"]["dynamicRes"])
+            math.atan2(self.y - my // config["Display"]["dynamicRes"], self.x - mx // config["Display"]["dynamicRes"]),
+            
             ])
 
 
         for bullet in self.bullet:
-            
+            bulletRect = bullet[0].get_rect()
+
             xVel = math.cos(bullet[5]) * self.bulletSpeed
             yVel = math.sin(bullet[5]) * self.bulletSpeed
             
@@ -76,6 +75,6 @@ class Player():
             bullet[2] -= yVel
 
 
-        
-            print(bullet[1])
-            
+
+    def gameMap(self):
+        pass
