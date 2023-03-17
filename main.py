@@ -26,7 +26,7 @@ displayFont = config["Display"]["font"]
 
 #BLIT FPS
 def displayFps():
-    font = pg.font.Font(displayFont , 18, bold=True)
+    font = pg.font.Font(displayFont , 18)
     getFps = str(int(fps.get_fps()))
     rendrFps = font.render(getFps, True, (30,200,200))
     display.blit(rendrFps, (5,5))
@@ -61,8 +61,10 @@ while True:
 
     overall.playerGun(pg, window, config)
     overall.playerEvent(pg, window)
-    overall.gameMap(pg, window)
+
     overall.placeBlock(pg, window, config)
+    overall.gameMap(pg, window)
+    overall.enemAi(pg, window)
     #=
     eventHandler()
 

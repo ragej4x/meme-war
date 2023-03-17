@@ -1,14 +1,14 @@
 {
     "Display":{
 
-        "width":720,
+        "width":820,
 
-        "height": 500,
+        "height": 520,
 
         "dynamicRes": 2,
 
         "windowMode": 1,
-
+        
         "frameRate": 60,
 
         "showFps": true,
@@ -17,5 +17,5 @@
 
     }
 
-}
 
+}

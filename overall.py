@@ -16,7 +16,7 @@ class Player():
 
         #GUN
         self.bullet = []
-        self.bulletSpeed = 7
+        self.bulletSpeed = 20
         self.bulX = self.x
         self.bulY = self.y
 
@@ -24,30 +24,55 @@ class Player():
         #MAP
         self.block = []
 
+
+
+        #ENEMY
+        self.enemyList = []
+        self.enemyX = 0
+        self.enemyY = 0
+
+        #CAMERA
+        self.cameraX = self.x
+        self.cameraY = self.y
+
     def playerEvent(self, pg, window):
+        
+
         self.keyinput = pg.key.get_pressed()
         self.playerRect = pg.Rect(self.x , self.y, 16,25)
         pg.draw.rect(window, (255,255,255), (self.playerRect))
-        
+        self.x = self.playerRect.x
+        self.y = self.playerRect.y
+        self.center = pg.Rect(self.x, self.y, 1,1)
+
+        self.dx = 0
+        self.dy = 0
 
         #MOVEMENT
         if self.keyinput[pg.K_a]:
-            self.x -= self.pSpeed
+            self.dx -= self.pSpeed
+            self.center.x -= self.pSpeed
+            self.cameraX -= self.pSpeed
 
         if self.keyinput[pg.K_d]:
-            self.x += self.pSpeed
-
+            self.dx += self.pSpeed
+            self.center.x += self.pSpeed
+            self.cameraX += self.pSpeed
 
         if self.keyinput[pg.K_w]:
-            self.y -= self.pSpeed
+            self.dy -= self.pSpeed
+            self.center.y -= self.pSpeed
+            self.cameraY -= self.pSpeed
 
         if self.keyinput[pg.K_s]:
-            self.y += self.pSpeed
-
+            self.dy += self.pSpeed
+            self.center.y += self.pSpeed
+            self.cameraY += self.pSpeed
 
 
 
     def playerGun(self, pg, window, config):
+        
         fire = pg.mouse.get_pressed()[0] 
         mx,my = pg.mouse.get_pos()
         mx // config["Display"]["dynamicRes"]
@@ -59,10 +84,10 @@ class Player():
 
 
         if fire:
-            self.bullet.append([pg.image.load("data/bulSprite.png") ,  self.x + 8, self.y,
+            self.bullet.append([pg.image.load("data/bulSprite.png") ,  self.center.x + 8, self.center.y,
             mx // config["Display"]["dynamicRes"],
             my // config["Display"]["dynamicRes"],
-            math.atan2(self.y - my // config["Display"]["dynamicRes"], self.x - mx // config["Display"]["dynamicRes"]),
+            math.atan2(self.center.y - my // config["Display"]["dynamicRes"], self.center.x - mx // config["Display"]["dynamicRes"]),
             
             ])
 
@@ -74,8 +99,8 @@ class Player():
             yVel = math.sin(bullet[5]) * self.bulletSpeed
             
             window.blit(bullet[0], (bullet[1] , bullet[2]))
-            bullet[1] -= xVel
-            bullet[2] -= yVel
+            
+            
 
 
 
@@ -90,8 +115,22 @@ class Player():
             self.block.append([pg.Rect(mx // config["Display"]["dynamicRes"], my // config["Display"]["dynamicRes"], 20,20)])
 
         for block in self.block:
-            pg.draw.rect(window, (255,255,255), (block[0]))
+            tile_1 = pg.draw.rect(window, (255,255,255), (block[0]))
+            tile_2 = pg.draw.rect(window, (255,255,255), (block[0]))
+
+            if tile_1.colliderect(self.playerRect.x + self.dx, self.playerRect.y, 16,25):
+                self.dx = 0
+
+            if tile_1.colliderect(self.playerRect.x, self.playerRect.y + self.dy, 16,25):
+                self.dy = 0
+                #print("a")
+
             
+    def enemAi(self, pg, window):
+        self.enemDx = 0
+        self.enemDy = 0
+        self.enemRect = pg.Rect(self.enemyX, self.enemyY, 16,25)
+        self.enemyList.append([pg.draw.rect(window,(255,0,0), (self.enemRect)) ])
 
 
     def gameMap(self, pg, window):
@@ -102,10 +141,26 @@ class Player():
         for tile in mapData["Map"]["testMapData"]:
             x = 0
             for i in tile:
-                x += 1 - 1
+                x += 1
                 if i == 1:
-                    pg.draw.rect(window, (255,255,255), (x * 20 , y * 20 , 20, 20))
+                    tile = pg.draw.rect(window, (255,255,255), (x * 20 , y * 20 , 20, 20))
+
+
+                    if tile.colliderect(self.playerRect.x + self.dx, self.playerRect.y, 16,25):
+                        self.dx = 0
+
+                    if tile.colliderect(self.playerRect.x, self.playerRect.y + self.dy, 16,25):
+                        self.dy = 0
+
+                #print("a")
 
                 if i == 0:
                     pg.Rect(x * 20, y * 20, 20, 20)
             y += 1
+
+
+        self.x += self.dx
+        self.y += self.dy 
+
+    def Ai(self):
+        pass
